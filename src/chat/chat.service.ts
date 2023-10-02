@@ -4,6 +4,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import axios from 'axios';
+import { CreateAnswerDto } from './dto/create-answer.dto';
 
 @Injectable()
 export class ChatService {
@@ -26,5 +27,23 @@ export class ChatService {
         '질문을 가져오는 데 실패했습니다.',
       ]);
     }
+  }
+
+  async createAnswer(createAnswerDto: CreateAnswerDto) {
+    const answer = createAnswerDto.answer;
+
+    await this.sendAnswer(answer);
+
+    return {
+      statusCode: HttpStatus.CREATED,
+      data: {
+        message: ['답변이 정상적으로 생성되었습니다.'],
+        answer,
+      },
+    };
+  }
+
+  async sendAnswer(answer: string) {
+    return answer;
   }
 }
