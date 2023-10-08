@@ -27,7 +27,7 @@ model Questions {
 
 model Users {
   id        String   @id @default(uuid())
-  mbti      Mbti     @relation(fields: [mbtiType], references: [type])
-  mbtiType  String
+  mbti      Mbti?    @relation(fields: [mbtiType], references: [type])
+  mbtiType  String?
   createdAt DateTime @default(now())
 }
