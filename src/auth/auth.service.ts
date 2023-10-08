@@ -1,19 +1,16 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
+import { v1 as uuid } from 'uuid';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-  ) {}
+  constructor(private readonly jwtService: JwtService) {}
 
   async getToken() {
-    const user = await this.usersService.create();
+    const userId = uuid();
 
     const payload = {
-      userId: user.id,
+      userId: userId,
     };
 
     return {
@@ -21,9 +18,9 @@ export class AuthService {
       data: {
         message: ['사용자의 토큰이 정상적으로 생성되었습니다.'],
         user: {
-          id: user.id,
+          id: userId,
           accessToken: await this.jwtService.signAsync(payload),
-          createdAt: user.createdAt,
+          createdAt: new Date(),
         },
       },
     };
