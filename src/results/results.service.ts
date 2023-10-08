@@ -10,11 +10,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ResultsService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async getMbtiFromAi() {
+  async getMbtiFromAi(userId: string) {
     const url = process.env.FASTAPI_URL;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        params: userId,
+      });
       const mbti = response.data;
 
       const result = await this.prismaService.mbti.findUnique({
@@ -27,6 +29,7 @@ export class ResultsService {
         statusCode: HttpStatus.OK,
         data: {
           message: ['결과를 정상적으로 조회했습니다.'],
+          userId: userId,
           result,
         },
       };
